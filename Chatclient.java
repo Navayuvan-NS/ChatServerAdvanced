@@ -20,7 +20,8 @@ class Chatclient {
 class MyclientT extends Thread{
 
 	JLabel l1,l2;
-	JTextArea area,space;
+	JTextArea area;
+	JTextField space;
 	JButton b;
 	DataInputStream din;
 	DataOutputStream dout;
@@ -44,7 +45,7 @@ class MyclientT extends Thread{
 		b.setBounds(200,600,100,40);
 		f.add(b);
 
-		space = new JTextArea();
+		space = new JTextField(20);
 		space.setBounds(5,540,490,50);
 		space.setFont(space.getFont().deriveFont(25.0f));
 		f.add(space);
@@ -66,7 +67,6 @@ class MyclientT extends Thread{
 	               msgout = space.getText();
 	               //msgout = br.readLine();
 	               area.append("You: "+msgout+"\n"); 
-
 	               b.addActionListener(new ActionListener(){
 	               		public void actionPerformed(ActionEvent e){
 	               			call();
