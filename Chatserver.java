@@ -64,20 +64,18 @@ class MyserverT extends Thread{
 	        //BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 	        
 	        while(!msgin.equals("end")){
-	        	if(space.getText() != null){
 	               msgin = din.readUTF();
 	               //System.out.println(msgin);
 	               area.append("Client: "+msgin+"\n");
 	               //msgout = br.readLine();
-	               msgout = space.getText();
+	               
 	               b.addActionListener(new ActionListener(){
 	               		public void actionPerformed(ActionEvent e){
-	               			call();
+	               			msgout = space.getText();
+	               			call(msgout);
 	               		}
 	               });
-	               //dout.writeUTF(msgout);
-	               dout.flush();
-	            }
+	               //dout.writeUTF(msgout);    
 	        }
 	    }
 		catch(Exception e){
@@ -88,10 +86,11 @@ class MyserverT extends Thread{
 		}
 	}
 
-	public void call(){
+	public void call(String a){
 		try{
-			area.append("Server: "+msgout+"\n");
-			dout.writeUTF(msgout);
+			area.append("Server: "+a+"\n");
+			dout.writeUTF(a);
+			dout.flush();
 		}
 		catch(Exception e){
 			space.setText("Error");

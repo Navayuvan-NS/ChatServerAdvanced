@@ -63,13 +63,11 @@ class MyclientT extends Thread{
 	        
 	        while(!msgin.equals("end")){
 	              
-	               msgout = space.getText();
-	               //msgout = br.readLine();
-	               area.append("You: "+msgout+"\n"); 
-
 	               b.addActionListener(new ActionListener(){
 	               		public void actionPerformed(ActionEvent e){
-	               			call();
+	               			msgout = space.getText();
+	               			area.append("You: "+msgout+"\n"); 
+	               			call(msgout);
 	               		}
 	               });
 	               msgin = din.readUTF();
@@ -85,10 +83,10 @@ class MyclientT extends Thread{
 		}
 	}
 
-	public void call(){
+	public void call(String a){
 		try{
-			area.append("You: "+msgout+"\n"); 
-		    dout.writeUTF(msgout);
+			area.append("You: "+a+"\n"); 
+		    dout.writeUTF(a);
 		}
 		catch(Exception e){
 			space.setText("Error");
