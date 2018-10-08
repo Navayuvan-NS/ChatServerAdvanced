@@ -11,20 +11,21 @@ class Chatserver {
 			myservert.start();
 		}
 		catch(Exception e){
-			System.out.println("Oops....!! Sorry. Error occured in Thread");
-			System.exit(0);
+			
 		}
 	}
 }
 
 class MyserverT extends Thread{
 
-	JLabel l1,l2;
-	JTextArea area,space;
-	JButton b;
-	DataInputStream din;
-	DataOutputStream dout;
-	String msgin="",msgout="";
+	public JLabel l1,l2;
+	public JTextArea area,space;
+	public JButton b;
+	public DataInputStream din;
+	public DataOutputStream dout;
+	public ServerSocket ss;
+	public String msgin="",msgout="";
+	public Socket s;
 	MyserverT(){
 		JFrame f = new JFrame("Server");
 
@@ -56,45 +57,41 @@ class MyserverT extends Thread{
 
 	public void run(){
 		try{
-			ServerSocket ss = new ServerSocket(6666);
+			ServerSocket ss = new ServerSocket(39521);
             Socket s = ss.accept();
-            DataInputStream din = new DataInputStream(s.getInputStream());
-	        DataOutputStream dout = new DataOutputStream(s.getOutputStream());
-
-	        //BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-	        
+            din = new DataInputStream(s.getInputStream());
+	        dout = new DataOutputStream(s.getOutputStream());        
 	        while(!msgin.equals("end")){
 	               msgin = din.readUTF();
-	               //System.out.println(msgin);
 	               area.append("Client: "+msgin+"\n");
-	               //msgout = br.readLine();
-	               
 	               b.addActionListener(new ActionListener(){
 	               		public void actionPerformed(ActionEvent e){
-	               			msgout = space.getText();
-	               			call(msgout);
+	               			msgout = space.getText().toString();
+	               			call(msgout,dout);
+	               			//space.setText("");
+	               			b = new JButton("Send");
 	               		}
 	               });
-	               //dout.writeUTF(msgout);    
 	        }
 	    }
 		catch(Exception e){
-			//System.out.println("Oops...!!! Problem in starting Server Socket");
 			space.setText("Oops...!!! Problem in starting Server Socket");
 			space.setEditable(false);
-			System.exit(0);
+			b.setEnabled(false);
 		}
 	}
 
-	public void call(String a){
+	public void call(String a,DataOutputStream dout){
 		try{
 			area.append("Server: "+a+"\n");
 			dout.writeUTF(a);
 			dout.flush();
+			space.setText("");
 		}
 		catch(Exception e){
-			space.setText("Error");
+			space.setText("Error in sending message");
+			space.setEditable(false);
+			b.setEnabled(false);
 		}
 	}
-
 }

@@ -11,24 +11,23 @@ class Chatclient {
 			myclientt.start();
 		}
 		catch(Exception e){
-			System.out.println("Oops....!! Sorry. Error occured in Thread");
-			System.exit(0);
+			
 		}
 	}
 }
 
 class MyclientT extends Thread{
 
-	JLabel l1,l2;
-	JTextArea area;
-	JTextField space;
-	JButton b;
-	DataInputStream din;
-	DataOutputStream dout;
-	String msgin="",msgout="";
+	public JLabel l1,l2;
+	public JTextArea area;
+	public JTextField space;
+	public JButton b;
+	public DataInputStream din;
+	public DataOutputStream dout;
+	public String msgin="",msgout="";
+	public Socket s;
 	MyclientT(){
 		JFrame f = new JFrame("Client");
-
 		l1 = new JLabel();
 		l1.setBounds(220,10,280,30);
 		l1.setText("Client");
@@ -54,49 +53,41 @@ class MyclientT extends Thread{
 		f.setLayout(null);
 		f.setVisible(true);
 	}
-
 	public void run(){
 		try{
-			Socket s = new Socket("localhost",6666);
-			DataInputStream din = new DataInputStream(s.getInputStream());
-        	DataOutputStream dout = new DataOutputStream(s.getOutputStream());
-        	//BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-	        
+			Socket s = new Socket("localhost",39521);
+			din = new DataInputStream(s.getInputStream());
+        	dout = new DataOutputStream(s.getOutputStream());
 	        while(!msgin.equals("end")){
-	              
-<<<<<<< HEAD
-=======
-	               msgout = space.getText();
-	               //msgout = br.readLine();
-	               area.append("You: "+msgout+"\n"); 
->>>>>>> 5537006aa006e77af9e0919633b61c5291af7dfa
 	               b.addActionListener(new ActionListener(){
 	               		public void actionPerformed(ActionEvent e){
 	               			msgout = space.getText();
-	               			area.append("You: "+msgout+"\n"); 
-	               			call(msgout);
+	               			call(msgout,dout);
+	               			//space.setText("");
+	               			b = new JButton("Send");
 	               		}
 	               });
 	               msgin = din.readUTF();
-	               //System.out.println(msgin);
-	               area.append("Server: "+msgin+"\n");            
+	               area.append("Server: "+msgin+"\n");
 	           }
 		}
 		catch(Exception e){
-			//System.out.println("Oops...!!! Problem in starting Client Socket.");
 			space.setText("Oops...!!! Problem in starting Client Socket");
 			space.setEditable(false);
-			System.exit(0);
+			b.setEnabled(false);
 		}
 	}
 
-	public void call(String a){
+	public void call(String a,DataOutputStream dout){
 		try{
 			area.append("You: "+a+"\n"); 
 		    dout.writeUTF(a);
+		    space.setText("");
 		}
 		catch(Exception e){
-			space.setText("Error");
+			space.setText("Error in sending message");
+			space.setEditable(false);
+			b.setEnabled(false);
 		}
 	}
 }
